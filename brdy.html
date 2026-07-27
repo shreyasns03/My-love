@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Birthday Surprise Gallery</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #ff7aa2 0%, #ffdce8 45%, #fff4f7 100%);
+      color: #4f2338;
+      padding: 24px;
+      overflow-x: hidden;
+      position: relative;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: 0.35;
+      animation: drift 10s ease-in-out infinite alternate;
+      z-index: 0;
+      pointer-events: none;
+    }
+    body::before { background: #ff8fb2; top: -60px; left: -40px; }
+    body::after { background: #ffd2df; bottom: -40px; right: -20px; animation-duration: 12s; }
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.92);
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.14);
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 3vw, 2.7rem);
+      color: #b23b66;
+      text-shadow: 0 2px 4px rgba(178,59,102,0.15);
+    }
+    p{
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+    .link-btn {
+      text-decoration: none;
+      background: linear-gradient(135deg, #ff5f8a, #ff8ba9);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      box-shadow: 0 8px 16px rgba(255,95,138,0.25);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .link-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(255,95,138,0.35);
+    }
+    .hero {
+      text-align: center;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      margin: 6px 0 22px;
+      color: #714353;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .photo-card {
+      background: #fff8fb;
+      border: 1px solid rgba(178,59,102,0.15);
+      border-radius: 20px;
+      padding: 12px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.07);
+      opacity: 0;
+      transform: translateY(24px);
+      animation: riseIn 0.8s ease forwards;
+    }
+    .photo-card:nth-child(2) { animation-delay: 0.15s; }
+    .photo-card:nth-child(3) { animation-delay: 0.3s; }
+    .photo-card:nth-child(4) { animation-delay: 0.45s; }
+    .photo-card:nth-child(5) { animation-delay: 0.6s; }
+    .photo-card:nth-child(6) { animation-delay: 0.75s; }
+    .photo-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 16px;
+      display: block;
+      transition: transform 0.35s ease, box-shadow 0.35s ease, filter 0.35s ease;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+    }
+    .photo-card:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 14px 28px rgba(178,59,102,0.18);
+    }
+    .photo-card:hover img {
+      transform: scale(1.04);
+      box-shadow: 0 0 0 4px rgba(255,95,138,0.2), 0 18px 30px rgba(255,95,138,0.25);
+      filter: brightness(1.08) saturate(1.2);
+    }
+    .photo-card p {
+      margin: 12px 0 0;
+      line-height: 1.65;
+      font-size: 0.97rem;
+      color: #63364a;
+    }
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 8px 0 16px;
+    }
+    .music-note {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #7a4550;
+      margin: -6px 0 14px;
+    }
+    .control-btn {
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ff5f8a, #ff8ba9);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      box-shadow: 0 8px 16px rgba(255,95,138,0.18);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .control-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(255,95,138,0.25);
+    }
+    .control-btn.secondary {
+      background: linear-gradient(135deg, #ff9db6, #ffb7c9);
+    }
+    .secret-note {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.45s ease, opacity 0.45s ease, padding 0.45s ease;
+      padding: 0 8px;
+      margin: 0 auto 18px;
+      text-align: center;
+      color: #7d4351;
+      font-weight: 600;
+    }
+    .secret-note.active {
+      max-height: 220px;
+      opacity: 1;
+      padding: 14px 16px;
+      background: #fff2f6;
+      border-radius: 16px;
+      border: 1px solid rgba(255,95,138,0.2);
+    }
+    .highlight {
+      text-align: center;
+      background: linear-gradient(135deg, #ff5f8a, #ff8ba9);
+      color: white;
+      padding: 16px;
+      border-radius: 16px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 24px 0 18px;
+      animation: pulseGlow 1.8s ease-in-out infinite;
+    }
+    .floating-hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .floating-hearts span {
+      position: absolute;
+      top: -20px;
+      font-size: 1.35rem;
+      animation: fall 7s linear infinite;
+      opacity: 0.75;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.12));
+    }
+    .floating-hearts span:nth-child(2n) { animation-duration: 8s; left: 20%; }
+    .floating-hearts span:nth-child(3n) { animation-duration: 9s; left: 45%; }
+    .floating-hearts span:nth-child(4n) { animation-duration: 10s; left: 70%; }
+    .floating-hearts span:nth-child(5n) { animation-duration: 6.5s; left: 84%; }
+    footer {
+      text-align: center;
+      padding-top: 10px;
+      font-size: 0.95rem;
+      color: #6f4456;
+      line-height: 1.7;
+    }
+    @keyframes riseIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(255,95,138,0); }
+      50% { transform: scale(1.01); box-shadow: 0 10px 20px rgba(255,95,138,0.2); }
+    }
+    @keyframes drift {
+      from { transform: translate(0,0) scale(1); }
+      to { transform: translate(30px, 30px) scale(1.08); }
+    }
+    @keyframes fall {
+      0% { transform: translate3d(0,0,0) rotate(0deg); }
+      100% { transform: translate3d(0,110vh,0) rotate(360deg); }
+    }
+    @media (max-width: 900px) {
+      .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 700px) {
+      .gallery { grid-template-columns: 1fr; }
+      .topbar { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <h1>Happy Birthday, My Special Person 💞</h1>
+      <a class="link-btn" href="surprise.html">Open for surprise</a>
+    </div>
+    <p class="hero">Today is extra special because the person who makes my world brighter deserves a little magic. This gallery is made to show you how much you mean to me, one lovely memory at a time.</p>
+
+    <div class="controls">
+      <button class="control-btn" id="musicBtn">🎵 Play birthday tune</button>
+      <button class="control-btn secondary" id="revealBtn">💌 Reveal a secret note</button>
+    </div>
+    <!-- <div class="music-note">To use your own song, place a file called <strong>birthday.mp3</strong> in this folder, or change the file name in the code.</div> -->
+
+    <audio id="birthdayAudio" loop preload="auto">
+      <source src="Giragira.mp3" type="audio/mpeg" />
+      <source src="birthday.wav" type="audio/wav" />
+      <source src="birthday.ogg" type="audio/ogg" />
+    </audio>
+    <div class="secret-note" id="secretNote">
+      <p>Your smile is my favorite kind of sunshine, and I hope your heart feels as loved as it deserves today.</p>
+    </div>
+
+    <div class="gallery">
+      <div class="photo-card">
+        <img src="L14.jpg" alt="Birthday memory" />
+        <p>Your smile makes ordinary days feel beautiful and full of light.</p>
+      </div>
+      <div class="photo-card">
+        <img src="L16.jpg" alt="Birthday memory" />
+        <p>Many more happy returns of the day — may this year bring joy, peace, and sweet laughter.</p>
+      </div>
+      <div class="photo-card">
+        <img src="L23.jpg" alt="Birthday memory" />
+        <p>You are truly special to me, and I cherish every moment we share.</p>
+      </div>
+      <div class="photo-card">
+        <img src="L20.jpg" alt="Birthday memory" />
+        <p>Your love has made my world softer, warmer, and much more beautiful.</p>
+      </div>
+      <div class="photo-card">
+        <img src="L21.jpg" alt="Birthday memory" />
+        <p>Whenever life feels heavy, remember that your smile is one of my favorite things.</p>
+      </div>
+      <div class="photo-card">
+        <img src="L17.jpg" alt="Birthday memory" />
+        <p>And once again, happy birthday, my love — you deserve the sweetest joy today and always.</p>
+      </div>
+    </div>
+
+    <div class="highlight">You are my favorite reason to smile 💖</div>
+
+    <footer>
+      Made with love just for you.<br />
+      <strong>From your special person 💕</strong>
+    </footer>
+  </div>
+  <div class="floating-hearts" aria-hidden="true">
+    <span>💖</span>
+    <span>💗</span>
+    <span>💞</span>
+    <span>💘</span>
+    <span>💝</span>
+  </div>
+  <script>
+    const musicBtn = document.getElementById('musicBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const secretNote = document.getElementById('secretNote');
+    const birthdayAudio = document.getElementById('birthdayAudio');
+    let audioContext = null;
+
+    async function playCustomMusic() {
+      try {
+        birthdayAudio.currentTime = 0;
+        await birthdayAudio.play();
+        musicBtn.textContent = '🎵 Music playing';
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function playFallbackTune() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+
+      const melody = [440, 554, 659, 784, 659, 554, 440];
+      const now = audioContext.currentTime;
+      melody.forEach((freq, index) => {
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        const start = now + index * 0.28;
+        const end = start + 0.24;
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, start);
+        gain.gain.setValueAtTime(0.0001, start);
+        gain.gain.exponentialRampToValueAtTime(0.07, start + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.0001, end);
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+        osc.start(start);
+        osc.stop(end + 0.01);
+      });
+
+      musicBtn.textContent = '🎵 Playing...';
+      setTimeout(() => {
+        musicBtn.textContent = '🎵 Play birthday tune';
+      }, 2200);
+    }
+
+    musicBtn.addEventListener('click', async () => {
+      const usedCustom = await playCustomMusic();
+      if (!usedCustom) {
+        playFallbackTune();
+      }
+    });
+
+    revealBtn.addEventListener('click', () => {
+      secretNote.classList.toggle('active');
+      revealBtn.textContent = secretNote.classList.contains('active')
+        ? '💌 Secret note opened'
+        : '💌 Reveal a secret note';
+    });
+  </script>
+</body>
+</html>
