@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Surprise</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffe0ec, #fff8fb 50%, #ffc7d8 100%);
+            color: #4f2338;
+            padding: 24px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.95);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 18px 40px rgba(0,0,0,0.1);
+        }
+        h2 {
+            margin: 0 0 14px;
+            background: linear-gradient(135deg, #b23b66, #ff5f8a);
+            padding: 20px 24px;
+            text-align: center;
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            color: white;
+            border-radius: 16px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        p{
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+        .top-link {
+            display: inline-block;
+            margin-bottom: 16px;
+            text-decoration: none;
+            color: #b23b66;
+            font-weight: 700;
+        }
+        .story {
+            display: grid;
+            gap: 18px;
+            margin-top: 10px;
+        }
+        .memory-card {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 16px;
+            align-items: center;
+            padding: 16px;
+            border-radius: 18px;
+            background: #fff8fb;
+            border: 1px solid rgba(178,59,102,0.12);
+            box-shadow: 0 10px 18px rgba(0,0,0,0.06);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: riseIn 0.8s forwards;
+        }
+        .memory-card:nth-child(2) { animation-delay: 0.15s; }
+        .memory-card:nth-child(3) { animation-delay: 0.3s; }
+        .memory-card:nth-child(4) { animation-delay: 0.45s; }
+        .memory-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            border-radius: 16px;
+            transition: transform 0.35s ease, box-shadow 0.35s ease, filter 0.35s ease;
+        }
+        .memory-card:hover img {
+            transform: scale(1.03);
+            box-shadow: 0 0 0 4px rgba(255,95,138,0.2), 0 16px 28px rgba(255,95,138,0.22);
+            filter: brightness(1.07) saturate(1.1);
+        }
+        .memory-card p {
+            font-size: 1rem;
+            line-height: 1.75;
+            margin: 0;
+            color: #5f3d4b;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 12px 0 18px;
+        }
+        .music-note {
+            font-size: 0.95rem;
+            color: #7a4550;
+            margin: -4px 0 14px;
+        }
+        .control-btn {
+            border: none;
+            cursor: pointer;
+            background: linear-gradient(135deg, #b23b66, #ff5f8a);
+            color: white;
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-weight: 700;
+            box-shadow: 0 8px 16px rgba(178,59,102,0.2);
+        }
+        .control-btn.secondary {
+            background: linear-gradient(135deg, #ff9db6, #ffb7c9);
+        }
+        .secret-box {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.4s ease, padding 0.4s ease;
+            margin-bottom: 10px;
+            padding: 0 8px;
+        }
+        .secret-box.active {
+            max-height: 220px;
+            opacity: 1;
+            padding: 14px 16px;
+            background: #fff2f6;
+            border-radius: 16px;
+            border: 1px solid rgba(178,59,102,0.18);
+        }
+        .special {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #b23b66;
+            padding: 14px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #fff0f4, #ffe2eb);
+            margin-top: 8px;
+            animation: pulse 1.6s ease-in-out infinite;
+        }
+        .floating-hearts {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .floating-hearts span {
+            position: absolute;
+            top: -20px;
+            font-size: 1.25rem;
+            animation: fall 7s linear infinite;
+            opacity: 0.8;
+        }
+        .floating-hearts span:nth-child(2n) { animation-duration: 8s; left: 25%; }
+        .floating-hearts span:nth-child(3n) { animation-duration: 9s; left: 55%; }
+        .floating-hearts span:nth-child(4n) { animation-duration: 6.5s; left: 80%; }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.01); }
+        }
+        @keyframes riseIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fall {
+            0% { transform: translate3d(0,0,0) rotate(0deg); }
+            100% { transform: translate3d(0,110vh,0) rotate(360deg); }
+        }
+        @media (max-width: 760px) {
+            .memory-card { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Your Birthday is Special for Me 💖✨</h2>
+        <a class="top-link" href="brdy.html">← birthday gallery</a>
+
+        <div class="controls">
+            <button class="control-btn" id="musicBtn">🎵 Play birthday tune</button>
+            <button class="control-btn secondary" id="revealBtn">💌 Reveal a sweet note</button>
+        </div>
+        <!-- <div class="music-note">To use your own song, place a file called <strong>birthday.mp3</strong> in this folder, or change the file name in the code.</div> -->
+
+        <audio id="birthdayAudio" loop preload="auto">
+            <source src="Giragira.mp3" type="audio/mpeg" />
+            <source src="birthday.wav" type="audio/wav" />
+            <source src="birthday.ogg" type="audio/ogg" />
+        </audio>
+
+        <div class="secret-box" id="secretBox">
+            <p>Every little moment with you feels precious, and I hope today brings you the happiest smile in the world.</p>
+        </div>
+
+        <div class="story">
+            <div class="memory-card">
+                <img src="L8.jpg" alt="Sweet memory" />
+                <p>Today is just another day for some people, but for me it is extra special because today is your day — and that makes everything brighter.</p>
+            </div>
+            <div class="memory-card">
+                <img src="L1.jpg" alt="Sweet memory" />
+                <p>Happy birthday, my love. I hope this year gives you endless joy, good health, success, and the sweetest smiles.</p>
+            </div>
+            <div class="memory-card">
+                <img src="L4.jpg" alt="Sweet memory" />
+                <p>You are always special to me, and I truly appreciate the love, care, and warmth you bring into my life.</p>
+            </div>
+            <div class="memory-card">
+                <img src="L15.jpg" alt="Sweet memory" />
+                <p>And once again, happy birthday — my heart is smiling because you are here, and you are loved more than words can say.</p>
+            </div>
+        </div>
+
+        <div class="special">Once again, happy birthday, my sweetest person 💕</div>
+    </div>
+    <div class="floating-hearts" aria-hidden="true">
+        <span>💖</span>
+        <span>💗</span>
+        <span>💞</span>
+        <span>💘</span>
+    </div>
+    <script>
+        const musicBtn = document.getElementById('musicBtn');
+        const revealBtn = document.getElementById('revealBtn');
+        const secretBox = document.getElementById('secretBox');
+        const birthdayAudio = document.getElementById('birthdayAudio');
+        let audioContext = null;
+
+        async function playCustomMusic() {
+            try {
+                birthdayAudio.currentTime = 0;
+                await birthdayAudio.play();
+                musicBtn.textContent = '🎵 Music playing';
+                return true;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        function playFallbackTune() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+
+            const melody = [392, 493, 587, 659, 587, 493, 392];
+            const now = audioContext.currentTime;
+            melody.forEach((freq, index) => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                const start = now + index * 0.28;
+                const end = start + 0.24;
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, start);
+                gain.gain.setValueAtTime(0.0001, start);
+                gain.gain.exponentialRampToValueAtTime(0.06, start + 0.03);
+                gain.gain.exponentialRampToValueAtTime(0.0001, end);
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                osc.start(start);
+                osc.stop(end + 0.01);
+            });
+
+            musicBtn.textContent = '🎵 Playing...';
+            setTimeout(() => {
+                musicBtn.textContent = '🎵 Play birthday tune';
+            }, 2200);
+        }
+
+        musicBtn.addEventListener('click', async () => {
+            const usedCustom = await playCustomMusic();
+            if (!usedCustom) {
+                playFallbackTune();
+            }
+        });
+
+        revealBtn.addEventListener('click', () => {
+            secretBox.classList.toggle('active');
+            revealBtn.textContent = secretBox.classList.contains('active')
+                ? '💌 Sweet note opened'
+                : '💌 Reveal a sweet note';
+        });
+    </script>
+</body>
+</html>

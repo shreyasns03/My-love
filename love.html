@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday My Love</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #ff7aa2, #ffd7e3 45%, #fff4f7 100%);
+      color: #5a1b3f;
+      padding: 24px;
+    }
+    .card {
+      width: min(920px, 100%);
+      background: rgba(255,255,255,0.92);
+      padding: 32px;
+      border-radius: 24px;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.14);
+      text-align: center;
+    }
+    .heart {
+      font-size: 3rem;
+      animation: pulse 1.6s ease-in-out infinite;
+      margin-bottom: 8px;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.12); }
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+    }
+    p {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin: 0 auto 18px;
+      max-width: 700px;
+    }
+    .photo-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+      margin: 20px 0 24px;
+    }
+    .photo-row img {
+      width: 160px;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 16px;
+      border: 3px solid #fff;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.16);
+    }
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      background: linear-gradient(135deg, #ff5f8a, #ff8ba9);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-weight: 700;
+      box-shadow: 0 10px 20px rgba(255,95,138,0.25);
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .small { font-size: 0.95rem; margin-top: 14px; color: #7a4860; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="heart">💖</div>
+    <h1>Happy Birthday, My Love</h1>
+    <p>Today is a beautiful day because it belongs to someone very special to me. I made this little surprise to remind you how much you mean to me and how much I love you.</p>
+    <div class="photo-row">
+      <img src="L12.jpg" alt="Birthday photo" />
+      <img src="L22.jpg" alt="Birthday photo" />
+      <img src="L7.jpg" alt="Birthday photo" />
+    </div>
+    <a class="btn" href="brdy.html">Open your birthday surprise</a>
+    <p class="small">A small gift from your special person 💕</p>
+  </div>
+</body>
+</html>
